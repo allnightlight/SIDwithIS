@@ -5,21 +5,20 @@ Created on 2020/07/16
 '''
 from batch_data_environment import BatchDataEnvironment
 
-class PoleBatchDataEnvironment(BatchDataEnvironment):
+class SidBatchDataEnvironment(BatchDataEnvironment):
     '''
     classdocs
     '''
 
 
-    def __init__(self, _y0, _U, _Y):
-        # _y0: (*, Ny), _U: (Nhrz, *, Nu), _Y: (Nhrz+1, *, Ny)
+    def __init__(self, _U0, _Y0, _U1, _Y2):
+        # _U0: (N0, *, Nu), _Y0: (N0, *, Ny)
+        # _U1: (N1, *, Nu), _Y2: (N2, *, Ny), N2 = N1 + 1
         
-        assert len(_y0.shape) == 2
-        assert len(_U.shape) == 3
-        assert len(_Y.shape) == 3
-        assert _U.shape[0] == _Y.shape[0]-1
-        assert _y0.shape == _Y.shape[1:]
+        for _var in (_U0, _Y0, _U1, _Y2):
+            assert len(_var.shape) == 3
 
-        self._y0 = _y0
-        self._U = _U
-        self._Y = _Y
+        self._U0 = _U0
+        self._Y0 = _Y0
+        self._U1 = _U1
+        self._Y2 = _Y2

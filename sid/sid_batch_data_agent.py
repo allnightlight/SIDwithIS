@@ -7,14 +7,14 @@ from batch_data_agent import BatchDataAgent
 
 
 
-class PoleBatchDataAgent(BatchDataAgent):
+class SidBatchDataAgent(BatchDataAgent):
     '''
     classdocs
     '''
 
 
     def __init__(self, _Yhat):
-        # _Y: (Nhrz, *, Ny)
+        # _Y: (N2 = 1 + N1, *, Ny)
         assert len(_Yhat.shape) == 3
         
         self._Yhat = _Yhat
