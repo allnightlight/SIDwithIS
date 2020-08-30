@@ -12,15 +12,12 @@ from util import Utils
 
 
 # <<abstract>>
-class PoleAgent(SlAgent):
+class SidAgent(SlAgent):
     '''
     classdocs
     '''
 
     checkPointPath = "./checkpoint"
-
-    def get_eig(self):
-        raise NotImplementedError()
     
     def createMemento(self):
         
