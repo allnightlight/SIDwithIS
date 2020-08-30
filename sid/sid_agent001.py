@@ -24,7 +24,7 @@ class SidAgent001(SidAgent, nn.Module):
         self.Ny, self.Nu, self.Nhidden = Ny, Nu, Nhidden
          
         self.xyu2x_enc = nn.Linear(Nhidden+Ny+Nu, Nhidden)
-        self.x2y_enc = nn.Linear(Nhidden, Ny)
+        self.x2x_enc = nn.Linear(Nhidden, Nhidden)
         
         self.xu2x_dec = nn.Linear(Nhidden+Nu, Nhidden)
         self.x2y_dec = nn.Linear(Nhidden, Ny)
@@ -49,7 +49,9 @@ class SidAgent001(SidAgent, nn.Module):
             _u = _U0[k1,:] # (*, Nu)
             _y = _Y0[k1,:] # (*, Ny)
             _x = self.xyu2x_enc(torch.cat((_x, _y, _u), dim=1)) # (*, Nhidden)
+        _x0hat = self.x2x_enc(_x) # (*, Nhidden)
  
+        _x = _x0hat # (*, Nhidden)
         X2 = []
         X2.append(_x)
         for k1 in range(N1):
