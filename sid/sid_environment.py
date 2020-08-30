@@ -4,23 +4,25 @@ Created on 2020/07/16
 @author: ukai
 '''
 import torch
-import numpy as np
-from sl_environment import SlEnvironment
-from data_generator_singleton import DataGeneratorSingleton
-from pole_batch_data_environment import PoleBatchDataEnvironment
 
-class PoleEnvironment(SlEnvironment):
+from data_generator_singleton import DataGeneratorSingleton
+import numpy as np
+from sid_batch_data_environment import SidBatchDataEnvironment
+from sl_environment import SlEnvironment
+
+
+class SidEnvironment(SlEnvironment):
     '''
     classdocs
     '''
 
 
-    def __init__(self, Nhidden, Ntrain, T0, T1, Ny, Nu, Nbatch, Nhrz, seed):
+    def __init__(self, Nhidden, Ntrain, T0, T1, Ny, Nu, Nbatch, N0, N1, seed):
         '''
         Constructor
         '''
         
-        super(PoleEnvironment, self).__init__()
+        super(SidEnvironment, self).__init__()
         
         self.dataGeneratorSingleton = DataGeneratorSingleton.getInstance(
                                             Nhidden=Nhidden
@@ -33,33 +35,32 @@ class PoleEnvironment(SlEnvironment):
         
         self.Ntrain = Ntrain
         self.Nbatch = Nbatch
-        self.Nhrz = Nhrz
+        self.N0 = N0
+        self.N1 = N1
         
         
     def generateBatchDataIterator(self):
 
 
         Nbatch = self.Nbatch 
-        Nhrz = self.Nhrz 
+        N0 = self.N0
+        N1 = self.N1 
         
-        for _ in range((self.Ntrain-Nhrz)//Nbatch):
-            idx = np.random.randint(low=0, high=self.Ntrain-Nhrz, size=(Nbatch,))
-            idx = idx.reshape((1,-1)) + np.arange(Nhrz+1).reshape(-1,1) # (Nhrz+1, Nbatch)
-            Ubatch = self.dataGeneratorSingleton.U[idx[:-1,:],:] # (Nhrz, *, Nu)
-            Ybatch = self.dataGeneratorSingleton.Y[idx,:] # (Nhrz+1, *, Ny)
-            y0 = Ybatch[0,...] # (*, Ny)
+        for _ in range((self.Ntrain-N0-N1)//Nbatch):
+            idx = np.random.randint(low=0, high=self.Ntrain-N0-N1, size=(Nbatch,))
+            idx = idx.reshape((1,-1)) + np.arange(N0+N1).reshape(-1,1) # (N0+N1, Nbatch)
+            U0batch = self.dataGeneratorSingleton.U[idx[:N0,:],:] # (N0, *, Nu)
+            U1batch = self.dataGeneratorSingleton.U[idx[N0:,:],:] # (N1, *, Nu)
             
-            _y0 = torch.tensor(y0)
-            _U = torch.tensor(Ubatch)
-            _Y = torch.tensor(Ybatch)
+            Y0batch = self.dataGeneratorSingleton.Y[idx[:N0,:],:] # (N0, *, Ny)
+            Y2batch = self.dataGeneratorSingleton.Y[idx[(N0-1):,:],:] # (N2, *, Ny)
             
-            batchDataEnvironment = PoleBatchDataEnvironment(_y0, _U, _Y)
+            _U0 = torch.tensor(U0batch)
+            _U1 = torch.tensor(U1batch)            
+            _Y0 = torch.tensor(Y0batch)
+            _Y2 = torch.tensor(Y2batch)
+            
+            batchDataEnvironment = SidBatchDataEnvironment( _U0, _Y0, _U1, _Y2)
             
             yield batchDataEnvironment
     
-    def get_eig(self):
-        
-        A = self.dataGeneratorSingleton.A        
-        eig, _ = np.linalg.eig(A)
-        
-        return eig
