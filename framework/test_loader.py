@@ -5,6 +5,7 @@ Created on 2020/07/10
 '''
 import os
 import unittest
+import pandas as pd
 
 from agent import Agent
 from agent_factory import AgentFactory
@@ -18,6 +19,7 @@ from trainer_factory import TrainerFactory
 from builtins import isinstance
 from environment import Environment
 from trainer import Trainer
+from evaluator import Evaluator
 
 
 class Test(unittest.TestCase):
@@ -102,7 +104,27 @@ class Test(unittest.TestCase):
             assert isinstance(environment, Environment)
             assert isinstance(trainer, Trainer)
             
+    def test002(self):
+        
+        store = Store(self.dbPath)
+        agentFactory = AgentFactory()
+        environmentFactory = EnvironmentFactory()
+        buildParameterFactory = BuildParameterFactory()
+        trainerFactory = TrainerFactory()
+        
+        evaluator = Evaluator()
+        
+        loader = Loader(agentFactory, buildParameterFactory, environmentFactory, trainerFactory, store)
+        assert isinstance(loader, Loader)
 
+        tbl = {name: [] for name in Evaluator.names}
+        for agent, buildParameter, epoch, environment, trainer in loader.load("test%", None):
+            row = evaluator.evaluate(agent, buildParameter, epoch, environment, trainer)
+            for name, val in zip(Evaluator.names, row):
+                tbl[name].append(val)        
+        tbl = pd.DataFrame(tbl)
+        
+            
 if __name__ == "__main__":
     #import sys;sys.argv = ['', 'Test.test0001']
     unittest.main()
