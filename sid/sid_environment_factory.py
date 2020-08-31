@@ -20,6 +20,7 @@ class SidEnvironmentFactory(SlEnvironmentFactory):
         
         environment = SidEnvironment(Nhidden = buildParameter.NhiddenEnv
                         , Ntrain = buildParameter.Ntrain
+                        , Ntest = buildParameter.Ntest
                         , T0 = buildParameter.T0
                         , T1 = buildParameter.T1
                         , Ny = buildParameter.Ny
