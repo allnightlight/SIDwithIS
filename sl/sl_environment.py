@@ -20,3 +20,7 @@ class SlEnvironment(Environment):
     def generateBatchDataIterator(self):
         
         yield BatchDataEnvironment()
+        
+    def getTestBatchData(self):
+        
+        return BatchDataEnvironment()

@@ -16,6 +16,7 @@ from sl_build_parameter_factory import SlBuildParameterFactory
 from sl_environment_factory import SlEnvironmentFactory
 from sl_trainer_factory import SlTrainerFactory
 from store import Store
+from sl_evaluator import SlEvaluator
 
 
 class Test(unittest.TestCase):
@@ -47,7 +48,7 @@ class Test(unittest.TestCase):
             nEpoch = 100
             self.buildParameters.append(SlBuildParameter(int(nIntervalSave), int(nEpoch), label="test" + str(k1)))
         
-        self.loader = Loader(agentFactory, buildParameterFactory, environmentFactory, store)
+        self.loader = Loader(agentFactory, buildParameterFactory, environmentFactory, trainerFactory, store)
         
     @classmethod
     def tearDownClass(cls):
@@ -62,9 +63,25 @@ class Test(unittest.TestCase):
             self.builder.build(buildParameter)
             
         assert isinstance(self.loader, Loader)        
-        for agent, buildParameter, epoch in self.loader.load("test%", None):
+        for agent, buildParameter, epoch, environment, trainer in self.loader.load("test%", None):
             assert isinstance(agent, SlAgent)
             assert isinstance(buildParameter, SlBuildParameter)
+
+    def test002(self):
+        evaluator = SlEvaluator()
+        
+        for buildParameter in self.buildParameters:
+            assert isinstance(buildParameter, SlBuildParameter)
+            self.builder.build(buildParameter)
+            
+        assert isinstance(self.loader, Loader)        
+        for agent, buildParameter, epoch, environment, trainer in self.loader.load("test%", None):
+            assert isinstance(agent, SlAgent)
+            assert isinstance(buildParameter, SlBuildParameter)
+            
+            row = evaluator.evaluate(agent, buildParameter, epoch, environment, trainer)
+            
+            assert isinstance(row, list)
 
 if __name__ == "__main__":
     #import sys;sys.argv = ['', 'Test.testName']
