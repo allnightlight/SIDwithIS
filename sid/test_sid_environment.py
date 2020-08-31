@@ -26,7 +26,7 @@ class Test(unittest.TestCase):
         
     def test002(self):
         
-        environment = SidEnvironment(Nhidden=2**2, Ntrain=2**10, T0=2**3, T1=2**4, Ny=1, Nu=1, Nbatch=2**5, N0=2**3, N1=2**2, seed = 1)
+        environment = SidEnvironment(Nhidden=2**2, Ntrain=2**10, Ntest =2**5, T0=2**3, T1=2**4, Ny=1, Nu=1, Nbatch=2**5, N0=2**3, N1=2**2, seed = 1)
         for batchDataEnvironment in environment.generateBatchDataIterator():
             assert isinstance(batchDataEnvironment, SidBatchDataEnvironment)
         

@@ -16,6 +16,7 @@ from sid_build_parameter_factory import SidBuildParameterFactory
 from sid_environment_factory import SidEnvironmentFactory
 from sid_trainer_factory import SidTrainerFactory
 from store import Store
+from sid_evaluator import SidEvaluator
 
 
 class Test(unittest.TestCase):
@@ -50,7 +51,7 @@ class Test(unittest.TestCase):
 #         for agentClass in ("agent002", "agent003", "agent004"): 
 #             self.buildParameters.append(SidBuildParameter(int(nIntervalSave), int(nEpoch), agentClass = agentClass, label="test " + agentClass))        
         
-        self.loader = Loader(agentFactory, buildParameterFactory, environmentFactory, store)
+        self.loader = Loader(agentFactory, buildParameterFactory, environmentFactory, trainerFactory, store)
         
     @classmethod
     def tearDownClass(cls):
@@ -60,14 +61,20 @@ class Test(unittest.TestCase):
             os.remove(cls.dbPath)
 
     def test001(self):
+        
+        evaluator = SidEvaluator()
+        
         for buildParameter in self.buildParameters:
             assert isinstance(buildParameter, SidBuildParameter)
             self.builder.build(buildParameter)
             
         assert isinstance(self.loader, Loader)        
-        for agent, buildParameter, epoch in self.loader.load("test%", None):
+        for agent, buildParameter, epoch, environment, trainer in self.loader.load("test%", None):
             assert isinstance(agent, SidAgent)  
             assert isinstance(buildParameter, SidBuildParameter)
+            
+            row = evaluator.evaluate(agent, buildParameter, epoch, environment, trainer)
+            
 
 if __name__ == "__main__":
     #import sys;sys.argv = ['', 'Test.testName']
