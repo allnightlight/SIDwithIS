@@ -14,6 +14,10 @@ from loader import Loader
 from store import Store
 from store_field import StoreField
 from environment_factory import EnvironmentFactory
+from trainer_factory import TrainerFactory
+from builtins import isinstance
+from environment import Environment
+from trainer import Trainer
 
 
 class Test(unittest.TestCase):
@@ -61,31 +65,42 @@ class Test(unittest.TestCase):
         agentFactory = AgentFactory()
         environmentFactory = EnvironmentFactory()
         buildParameterFactory = BuildParameterFactory()
+        trainerFactory = TrainerFactory()
         
-        loader = Loader(agentFactory, buildParameterFactory, environmentFactory, store)
+        loader = Loader(agentFactory, buildParameterFactory, environmentFactory, trainerFactory, store)
         assert isinstance(loader, Loader)
         
-        for agent, buildParameter, epoch in loader.load("test%", None):
+        for agent, buildParameter, epoch, environment, trainer in loader.load("test%", None):
             assert isinstance(agent, Agent)
             assert isinstance(buildParameter, BuildParameter)
+            assert isinstance(environment, Environment)
+            assert isinstance(trainer, Trainer)
 
         epochGiven = 1
-        for agent, buildParameter, epoch in loader.load("test%", epoch=epochGiven):
+        for agent, buildParameter, epoch, environment, trainer in loader.load("test%", epoch=epochGiven):
             assert isinstance(agent, Agent)
             assert isinstance(buildParameter, BuildParameter)
             assert epoch == epochGiven
+            assert isinstance(environment, Environment)
+            assert isinstance(trainer, Trainer)
+
 
         buildParameterKeyGiven = buildParameter.key
-        for agent, buildParameter, epoch in loader.load("test%", buildParameterKey=buildParameterKeyGiven):
+        for agent, buildParameter, epoch, environment, trainer in loader.load("test%", buildParameterKey=buildParameterKeyGiven):
             assert isinstance(agent, Agent)
             assert isinstance(buildParameter, BuildParameter)
             assert buildParameter.key == buildParameterKeyGiven
+            assert isinstance(environment, Environment)
+            assert isinstance(trainer, Trainer)
 
-        for agent, buildParameter, epoch in loader.load("test%", buildParameterKey=buildParameterKeyGiven, epoch = epochGiven):
+
+        for agent, buildParameter, epoch, environment, trainer in loader.load("test%", buildParameterKey=buildParameterKeyGiven, epoch = epochGiven):
             assert isinstance(agent, Agent)
             assert isinstance(buildParameter, BuildParameter)
             assert buildParameter.key == buildParameterKeyGiven
             assert epoch == epochGiven
+            assert isinstance(environment, Environment)
+            assert isinstance(trainer, Trainer)
             
 
 if __name__ == "__main__":

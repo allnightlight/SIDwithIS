@@ -6,6 +6,7 @@ Created on 2020/07/10
 from agent_factory import AgentFactory
 from environment_factory import EnvironmentFactory
 from store import Store
+from trainer_factory import TrainerFactory
 
 
 class Loader(object):
@@ -14,17 +15,19 @@ class Loader(object):
     '''
 
 
-    def __init__(self, agentFactory, buildParameterFactory, environmentFactory, store):
+    def __init__(self, agentFactory, buildParameterFactory, environmentFactory, trainerFactory, store):
         '''
         Constructor
         '''
         
         assert isinstance(agentFactory, AgentFactory)
-        assert isinstance(environmentFactory, EnvironmentFactory)        
+        assert isinstance(environmentFactory, EnvironmentFactory)
+        assert isinstance(trainerFactory, TrainerFactory)        
         assert isinstance(store, Store)
         
         self.agentFactory = agentFactory
         self.environmentFactory = environmentFactory
+        self.trainerFactory = trainerFactory
         self.buildParameterFactory = buildParameterFactory
         self.store = store
         store.update_db()
@@ -40,6 +43,8 @@ class Loader(object):
             agent = self.agentFactory.create(buildParameter, environment)
             agent.loadMemento(storeField.agentMemento)
             
+            trainer = self.trainerFactory.create(buildParameter, agent, environment)
+            
             epoch = storeField.epoch
             
-            yield agent, buildParameter, epoch
+            yield agent, buildParameter, epoch, environment, trainer
