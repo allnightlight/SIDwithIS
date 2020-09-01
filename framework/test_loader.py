@@ -117,11 +117,12 @@ class Test(unittest.TestCase):
         loader = Loader(agentFactory, buildParameterFactory, environmentFactory, trainerFactory, store)
         assert isinstance(loader, Loader)
 
-        tbl = {name: [] for name in Evaluator.names}
+        tbl = {"criteria": [], "score": []}
         for agent, buildParameter, epoch, environment, trainer in loader.load("test%", None):
             row = evaluator.evaluate(agent, buildParameter, epoch, environment, trainer)
-            for name, val in zip(Evaluator.names, row):
-                tbl[name].append(val)        
+            for criteria in row:
+                tbl["criteria"].append(criteria)
+                tbl["score"].append(row[criteria])        
         tbl = pd.DataFrame(tbl)
         
             

@@ -63,7 +63,7 @@ class Test(unittest.TestCase):
             self.builder.build(buildParameter)
             
         assert isinstance(self.loader, Loader)        
-        for agent, buildParameter, epoch in self.loader.load("test%", None):
+        for agent, buildParameter, epoch, environment, trainer in self.loader.load("test%", None):
             assert isinstance(agent, Agent)
             assert isinstance(buildParameter, BuildParameter)
         
