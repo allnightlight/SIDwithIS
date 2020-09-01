@@ -17,6 +17,7 @@ from sid_environment_factory import SidEnvironmentFactory
 from sid_trainer_factory import SidTrainerFactory
 from store import Store
 from sid_evaluator import SidEvaluator
+from builtins import isinstance
 
 
 class Test(unittest.TestCase):
@@ -80,6 +81,7 @@ class Test(unittest.TestCase):
             
             row = evaluator.evaluate(agent, buildParameter, epoch, environment, trainer)
             
+            assert isinstance(row, dict)
 
 if __name__ == "__main__":
     #import sys;sys.argv = ['', 'Test.testName']

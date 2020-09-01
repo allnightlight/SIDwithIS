@@ -13,13 +13,6 @@ class SidEvaluator(SlEvaluator):
     '''
     classdocs
     '''
-
-    names = [
-        "error_initial"
-        , "error_first_step"
-        , "error_last_step"
-        , "error_median"
-        ]
     
     
     def evaluateError(self, testBatchDataIn, testBatchDataOut):
@@ -30,12 +23,11 @@ class SidEvaluator(SlEvaluator):
         Y2 = testBatchDataIn._Y2.data.numpy() # (N2, *, Ny)
         Y2hat = testBatchDataOut._Yhat.data.numpy() # (N2, *, Ny)
         
-        error = np.mean((Y2-Y2hat)**2, axis=(1,2)) # (N2,)
-        row = [
-            error[0]
-            , error[1] if len(error) >= 1 else np.nan
-            , error[-1]
-            , np.median(error)
-            ]
+        error = np.sqrt(np.mean((Y2-Y2hat)**2, axis=(1,2))) # (N2,)
+        
+        row = {}
+        for k1 in range(error.shape[0]):
+            row["RMSE_STEP%02d" % k1] = error[k1]
+        row["RMSE_AVERAGE"] = np.mean(error)
         
         return row
