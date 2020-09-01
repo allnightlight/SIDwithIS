@@ -81,7 +81,7 @@ class Test(unittest.TestCase):
             
             row = evaluator.evaluate(agent, buildParameter, epoch, environment, trainer)
             
-            assert isinstance(row, list)
+            assert isinstance(row, dict)
 
 if __name__ == "__main__":
     #import sys;sys.argv = ['', 'Test.testName']

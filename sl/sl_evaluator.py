@@ -13,8 +13,6 @@ class SlEvaluator(Evaluator):
     classdocs
     '''
 
-    names = ["RMSE", "CORR"]
-
     # <<public>> <<final?>>
     def evaluate(self, agent, buildParameter, epoch, environment, trainer):
         
@@ -28,4 +26,4 @@ class SlEvaluator(Evaluator):
         
     # <<protected>>
     def evaluateError(self, testBatchDataIn, testBatchDataOut):
-        return [1.23, 0.56]
+        return dict(zip(["RMSE", "CORR"], [1.23, 0.56,]))

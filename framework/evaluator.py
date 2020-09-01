@@ -10,8 +10,7 @@ class Evaluator(object):
     classdocs
     '''
 
-    names = ["RMSE", "CORR"]
-    
     
     def evaluate(self, agent, buildParameter, epoch, environment, trainer):
-        return [1.23, 0.56,]
+        
+        return dict(zip(["RMSE", "CORR"], [1.23, 0.56,]))
