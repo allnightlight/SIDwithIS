@@ -8,10 +8,10 @@ import torch
 from data_generator_singleton import DataGeneratorSingleton
 import numpy as np
 from sid_batch_data_environment import SidBatchDataEnvironment
-from sl_environment import SlEnvironment
+from sid_environment_abstract import SidEnvironmentAbstract
 
 
-class SidEnvironment(SlEnvironment):
+class SidEnvironment(SidEnvironmentAbstract):
     '''
     classdocs
     '''

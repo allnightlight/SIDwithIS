@@ -12,8 +12,8 @@ from torch.optim import Adam
 from sid_agent import SidAgent
 from sid_batch_data_agent import SidBatchDataAgent
 from sid_batch_data_environment import SidBatchDataEnvironment
-from sid_environment import SidEnvironment
 from sl_trainer import SlTrainer
+from sid_environment_abstract import SidEnvironmentAbstract
 
 
 class SidTrainer(SlTrainer):
@@ -26,7 +26,7 @@ class SidTrainer(SlTrainer):
         SlTrainer.__init__(self, agent, environment)
         
         assert isinstance(agent, SidAgent)
-        assert isinstance(environment, SidEnvironment)
+        assert isinstance(environment, SidEnvironmentAbstract)
         
         self.optimizer = Adam(agent.parameters())
         
