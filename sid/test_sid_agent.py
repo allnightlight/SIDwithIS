@@ -22,9 +22,10 @@ class Test(unittest.TestCase):
         
         environment = SidEnvironment(Nhidden=2**2, Ntrain=2**10, Ntest =2**5, T0=2**3, T1=2**4, Ny=Ny, Nu=Nu, Nbatch=2**5, N0=2**3, N1=2**2, seed = 1)
         
-        params = dict(Ny=Ny, Nu=Nu, Nhidden=2**3)
+        params1 = dict(Ny=Ny, Nu=Nu, Nhidden=2**3, use_offset_compensate = True)
+        params2 = dict(Ny=Ny, Nu=Nu, Nhidden=2**3, use_offset_compensate = False)
         
-        for agent in (SidAgent001(**params),):
+        for agent in (SidAgent001(**params1), SidAgent001(**params2)):
             
             for batchDataIn in environment.generateBatchDataIterator():
                 batchDataOut = agent(batchDataIn)
@@ -37,7 +38,7 @@ class Test(unittest.TestCase):
         Ny = 2
         Nu = 3
         
-        params = dict(Ny=Ny, Nu=Nu, Nhidden=2**3)
+        params = dict(Ny=Ny, Nu=Nu, Nhidden=2**3, use_offset_compensate = False)
         
         agent = SidAgent001(**params)
         agentAnother = SidAgent001(**params)
