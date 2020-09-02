@@ -38,7 +38,7 @@ class Test(unittest.TestCase):
     def test004(self):
         import matplotlib.pylab as plt
         
-        dg = DataGeneratorSingleton.getInstance(Nhidden=2**2, Ntrain=2**10, T0=2**3, T1=2**4, Ny=2, Nu=2, Nw = 1, prob_step = 1/2**8, action_distribution = "step", seed = 0)
+        dg = DataGeneratorSingleton.getInstance(Nhidden=2**2, Ntrain=2**10, T0=2**3, T1=2**4, Ny=2, Nu=2, Nw = 1, prob_step = 1/2**8, action_distribution = "step", amp_dv = 1.0, seed = 0)
         plt.plot(dg.Y)
         plt.show()
 
@@ -48,7 +48,7 @@ class Test(unittest.TestCase):
         N0 = 2**3
         N1 = 2**2
         for _ in range(10):
-            environment = SidEnvironmentImbalancedSampling(Nhidden=2**2, Ntrain=2**10, Ntest =2**5, T0=2**3, T1=2**4, Ny=1, Nu=1, Nw=1, prob_step=1/2**3, Nbatch=Nbatch, N0=N0, N1=N1, sampling_balance=0.5, seed = 1)
+            environment = SidEnvironmentImbalancedSampling(Nhidden=2**2, Ntrain=2**10, Ntest =2**5, T0=2**3, T1=2**4, Ny=1, Nu=1, Nw=1, prob_step=1/2**3, Nbatch=Nbatch, N0=N0, N1=N1, sampling_balance=0.5, amp_dv = 1.0, seed = 1)
             for batchDataEnvironment in environment.generateBatchDataIterator():
                 assert isinstance(batchDataEnvironment, SidBatchDataEnvironment)
                 assert np.all(batchDataEnvironment._U0.shape[0:2] == (N0, Nbatch))
