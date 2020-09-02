@@ -17,7 +17,7 @@ class SidEnvironmentImbalancedSampling(SidEnvironmentAbstract):
     '''
 
 
-    def __init__(self, Nhidden, Ntrain, Ntest, T0, T1, Ny, Nu, Nw, prob_step, Nbatch, N0, N1, sampling_balance, seed):
+    def __init__(self, Nhidden, Ntrain, Ntest, T0, T1, Ny, Nu, Nw, prob_step, Nbatch, N0, N1, sampling_balance, amp_dv, seed):
         '''
         Constructor
         '''
@@ -34,6 +34,7 @@ class SidEnvironmentImbalancedSampling(SidEnvironmentAbstract):
                                            , Nw=Nw
                                            , prob_step=prob_step
                                            , action_distribution="step"
+                                           , amp_dv=amp_dv
                                            , seed=seed)
         
         self.Ntrain = Ntrain

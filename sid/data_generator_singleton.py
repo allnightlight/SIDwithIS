@@ -28,7 +28,7 @@ class DataGeneratorSingleton(object):
         return _inst
         
     def __init__(self, Nhidden, Ntrain = 2**12, T0 = 2**1, T1 = 2**7, 
-        Ny = None, Nu = None, Nw = None, prob_step = 1/2**4, action_distribution = "normal", seed = 0):
+        Ny = None, Nu = None, Nw = None, prob_step = 1/2**4, action_distribution = "normal", amp_dv = 1.0, seed = 0):
         
         print("""\
         
@@ -42,10 +42,11 @@ class DataGeneratorSingleton(object):
         Nu: {5}
         Nw: {6}
         action_distribution: {7}
-        seed: {8}
+        amp_dv: {8}
+        seed: {9}
         ========================        
         
-        """.format(Nhidden, Ntrain, T0, T1, Ny, Nu, Nw, action_distribution, seed))
+        """.format(Nhidden, Ntrain, T0, T1, Ny, Nu, Nw, action_distribution, amp_dv, seed))
         
         rstate = np.random.RandomState(seed)
         
@@ -89,7 +90,7 @@ class DataGeneratorSingleton(object):
             U = rstate.randn(Ntrain, Nu)
             Ev = None
             
-        W = rstate.randn(Ntrain, Nw)
+        W = rstate.randn(Ntrain, Nw) * amp_dv
         UW = np.concatenate((U, W), axis=-1)        
         for k1 in range(Ntrain):
             uw = UW[k1,:]

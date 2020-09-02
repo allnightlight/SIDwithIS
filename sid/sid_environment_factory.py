@@ -46,6 +46,7 @@ class SidEnvironmentFactory(SlEnvironmentFactory):
                 , N0 = buildParameter.N0
                 , N1 = buildParameter.N1
                 , sampling_balance = buildParameter.sampling_balance
+                , amp_dv = buildParameter.amp_dv
                 , seed = buildParameter.seed)
         
         return environment
