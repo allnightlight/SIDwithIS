@@ -88,7 +88,7 @@ class DataGeneratorSingleton(object):
             
         if action_distribution == "normal":
             U = rstate.randn(Ntrain, Nu)
-            Ev = None
+            Ev = np.ones(Ntrain) # (Ntrain)
             
         W = rstate.randn(Ntrain, Nw) * amp_dv
         UW = np.concatenate((U, W), axis=-1)        
