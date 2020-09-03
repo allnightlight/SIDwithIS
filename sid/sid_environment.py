@@ -75,7 +75,7 @@ class SidEnvironment(SidEnvironmentAbstract):
         N0 = self.N0
         N1 = self.N1 
         
-        idx = np.arange(self.Ntrain, self.Ntrain+self.Ntest-N0-N1) # (*, ), where Nbatch = Ntest - N0 - N1.
+        idx = np.arange(self.Ntrain+N0, self.Ntrain+self.Ntest-N1) # (*, ), where Nbatch = Ntest - N0 - N1.
         idx = idx.reshape((1,-1)) + np.arange(N0+N1).reshape(-1,1) # (N0+N1, *)
         U0batch = self.dataGeneratorSingleton.U[idx[:N0,:],:] # (N0, *, Nu)
         U1batch = self.dataGeneratorSingleton.U[idx[N0:,:],:] # (N1, *, Nu)

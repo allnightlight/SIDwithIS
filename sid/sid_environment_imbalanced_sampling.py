@@ -88,12 +88,7 @@ class SidEnvironmentImbalancedSampling(SidEnvironmentAbstract):
         N0 = self.N0
         N1 = self.N1
         
-        idxEvOn = np.where(self.dataGeneratorSingleton.Ev == 1)[0]
-        idxEvOff = np.where(self.dataGeneratorSingleton.Ev == 0)[0]
-        idxEvOff = idxEvOff[(idxEvOff >= self.Ntrain + N0) & (idxEvOff <= self.Ntest + self.Ntrain-N1)] # [Ntrain+N0, Ntest+Ntrain-N1]
-        idxEvOn = idxEvOn[(idxEvOn >= self.Ntrain + N0) & (idxEvOn <= self.Ntest + self.Ntrain-N1)] # [Ntrain+N0, Ntest+Ntrain-N1]
- 
-        idx = idxEvOn
+        idx = np.arange(self.Ntrain+N0, self.Ntrain+self.Ntest-N1) # (*, ), where Nbatch = Ntest - N0 - N1.
         idx = idx.reshape((1,-1)) + np.arange(-N0, N1).reshape(-1,1) # (N0+N1, *) [Ntrain, Ntest+Ntrain-1]
         U0batch = self.dataGeneratorSingleton.U[idx[:N0,:],:] # (N0, *, Nu)
         U1batch = self.dataGeneratorSingleton.U[idx[N0:,:],:] # (N1, *, Nu)
