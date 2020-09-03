@@ -23,11 +23,13 @@ class SidEvaluator(SlEvaluator):
         Y2 = testBatchDataIn._Y2.data.numpy() # (N2, *, Ny)
         Y2hat = testBatchDataOut._Yhat.data.numpy() # (N2, *, Ny)
         
-        error = np.sqrt(np.mean((Y2-Y2hat)**2, axis=(1,2))) # (N2,)
+        mseForEveryStep = np.mean((Y2-Y2hat)**2, axis=(1,2)) # (N2,)
+        rmseForEveryStep = np.sqrt(mseForEveryStep) # (N2,)
+        rmseAverage = np.sqrt(np.mean(mseForEveryStep)) # (,)
         
         row = {}
-        for k1 in range(error.shape[0]):
-            row["RMSE_STEP%02d" % k1] = error[k1]
-        row["RMSE_AVERAGE"] = np.mean(error)
+        for k1 in range(rmseForEveryStep.shape[0]):
+            row["RMSE_STEP%02d" % k1] = rmseForEveryStep[k1]
+        row["RMSE_AVERAGE"] = rmseAverage
         
         return row
