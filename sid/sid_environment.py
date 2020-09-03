@@ -56,12 +56,17 @@ class SidEnvironment(SidEnvironmentAbstract):
             Y0batch = self.dataGeneratorSingleton.Y[idx[:N0,:],:] # (N0, *, Ny)
             Y2batch = self.dataGeneratorSingleton.Y[idx[(N0-1):,:],:] # (N2, *, Ny)
             
+            Ev0batch = self.dataGeneratorSingleton.Ev[idx[:N0,:]] # (N0, *)
+            Ev1batch = self.dataGeneratorSingleton.Ev[idx[N0:,:]] # (N1, *)
+            
             _U0 = torch.tensor(U0batch)
-            _U1 = torch.tensor(U1batch)            
+            _U1 = torch.tensor(U1batch)
+            _Ev0 = torch.tensor(Ev0batch)
+            _Ev1 = torch.tensor(Ev1batch)
             _Y0 = torch.tensor(Y0batch)
             _Y2 = torch.tensor(Y2batch)
             
-            batchDataEnvironment = SidBatchDataEnvironment( _U0, _Y0, _U1, _Y2)
+            batchDataEnvironment = SidBatchDataEnvironment( _U0, _Ev0, _Y0, _U1, _Ev1, _Y2)
             
             yield batchDataEnvironment
     
@@ -70,19 +75,24 @@ class SidEnvironment(SidEnvironmentAbstract):
         N0 = self.N0
         N1 = self.N1 
         
-        idx = np.arange(self.Ntrain, self.Ntrain+self.Ntest-N0-N1) # (*, ), where Nbatch = Ntest - N0 - N1.
+        idx = np.arange(self.Ntrain+N0, self.Ntrain+self.Ntest-N1) # (*, ), where Nbatch = Ntest - N0 - N1.
         idx = idx.reshape((1,-1)) + np.arange(N0+N1).reshape(-1,1) # (N0+N1, *)
         U0batch = self.dataGeneratorSingleton.U[idx[:N0,:],:] # (N0, *, Nu)
         U1batch = self.dataGeneratorSingleton.U[idx[N0:,:],:] # (N1, *, Nu)
         
         Y0batch = self.dataGeneratorSingleton.Y[idx[:N0,:],:] # (N0, *, Ny)
         Y2batch = self.dataGeneratorSingleton.Y[idx[(N0-1):,:],:] # (N2, *, Ny)
-        
+
+        Ev0batch = self.dataGeneratorSingleton.Ev[idx[:N0,:]] # (N0, *)
+        Ev1batch = self.dataGeneratorSingleton.Ev[idx[N0:,:]] # (N1, *)
+
         _U0 = torch.tensor(U0batch)
-        _U1 = torch.tensor(U1batch)            
+        _U1 = torch.tensor(U1batch)
+        _Ev0 = torch.tensor(Ev0batch)
+        _Ev1 = torch.tensor(Ev1batch)
         _Y0 = torch.tensor(Y0batch)
         _Y2 = torch.tensor(Y2batch)
-        
-        batchDataEnvironment = SidBatchDataEnvironment( _U0, _Y0, _U1, _Y2)
+                
+        batchDataEnvironment = SidBatchDataEnvironment( _U0, _Ev0, _Y0, _U1, _Ev1, _Y2)
         
         return batchDataEnvironment
