@@ -29,6 +29,7 @@ class SidEnvironmentAbstract(SlEnvironment):
         self.dataGeneratorSingleton = dataGeneratorSingleton
         assert Ntrain < dataGeneratorSingleton.Nsample
         self.Ntrain = Ntrain
+        self.Ntest = dataGeneratorSingleton.Nsample-Ntrain
         self.Nbatch = Nbatch
         self.N0 = N0 # estimation horizon's length
         self.N1 = N1 # prediction horizon's length
