@@ -11,6 +11,9 @@ from sid_batch_data_environment import SidBatchDataEnvironment
 from sid_environment import SidEnvironment
 from sid_environment_imbalanced_sampling import SidEnvironmentImbalancedSampling
 from data_generator_from_csv_singleton import DataGeneratorFromCsvSingleton
+from data_generator_abstract_singleton import DataGeneratorAbstractSingleton
+from sid_environment_abstract import SidEnvironmentAbstract
+from builtins import isinstance
 
 
 class Test(unittest.TestCase):
@@ -23,19 +26,20 @@ class Test(unittest.TestCase):
     
             dg = DataGeneratorSingleton.getInstance(Nhidden=2**2, Ntrain=2**10, T0=2**3, T1=2**4, Ny=1, Nu=1, seed = 1)
             
-        
+    @unittest.skip("not used")
     def test002(self):
         
         environment = SidEnvironment(Nhidden=2**2, Ntrain=2**10, Ntest =2**5, T0=2**3, T1=2**4, Ny=1, Nu=1, Nbatch=2**5, N0=2**3, N1=2**2, seed = 1)
         for batchDataEnvironment in environment.generateBatchDataIterator():
             assert isinstance(batchDataEnvironment, SidBatchDataEnvironment)
         
+    @unittest.skip("not used")
     def test003(self):
         
         for _ in range(10):
             dg = DataGeneratorSingleton.getInstance(Nhidden=2**2, Ntrain=2**10, T0=2**3, T1=2**4, Ny=1, Nu=1, Nw = 0, action_distribution = "step", seed = 0)
             
-    @unittest.skip("tmp")
+    @unittest.skip("not used")
     def test004(self):
         import matplotlib.pylab as plt
         
@@ -43,6 +47,7 @@ class Test(unittest.TestCase):
         plt.plot(dg.Y)
         plt.show()
 
+    @unittest.skip("not used")
     def test005(self):
         
         Nbatch = 2**5
@@ -58,9 +63,17 @@ class Test(unittest.TestCase):
                 assert np.all(batchDataEnvironment._U1.shape[0:2] == (N1, Nbatch))
             environment.getTestBatchData()
 
+    @unittest.skip("not used")
     def test006(self):
         
         dg = DataGeneratorFromCsvSingleton("data.csv")
+        
+    def test007(self):
+        
+        dataGeneratorSingleton = DataGeneratorAbstractSingleton(2**10, 2, 3)
+        environment = SidEnvironmentAbstract(dataGeneratorSingleton, Ntrain=2**9, Nbatch=2**5, N0=2**2, N1=2**2, sampling_balance=0.5)
+        assert isinstance(environment, SidEnvironmentAbstract)
+
     
 if __name__ == "__main__":
     #import sys;sys.argv = ['', 'Test.test001']
