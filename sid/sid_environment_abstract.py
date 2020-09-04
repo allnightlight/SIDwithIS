@@ -18,7 +18,7 @@ class SidEnvironmentAbstract(SlEnvironment):
     classdocs
     '''
 
-    def __init__(self, dataGeneratorSingleton, Ntrain, Nbatch, N0, N1, sampling_balance):
+    def __init__(self, dataGeneratorSingleton, Ntrain, Nbatch, N0, N1):
         SlEnvironment.__init__(self)
         
         assert isinstance(dataGeneratorSingleton, DataGeneratorAbstractSingleton)
@@ -36,7 +36,6 @@ class SidEnvironmentAbstract(SlEnvironment):
         self.Nbatch = Nbatch
         self.N0 = N0 # estimation horizon's length
         self.N1 = N1 # prediction horizon's length
-        self.sampling_balance = sampling_balance # the proportional rate of samples with ev == 1 in a batch data
         
     # <<protected>>
     def getAvailableIndex(self, segment):
@@ -53,7 +52,7 @@ class SidEnvironmentAbstract(SlEnvironment):
         
         return idxAvailable # (N0+N1, Navailable)
         
-    # <<private>>
+    # <<protected>>
     def extractBatchData(self, idx):
         # idx: (N0+N1, *)
         
@@ -80,14 +79,8 @@ class SidEnvironmentAbstract(SlEnvironment):
         return batchDataEnvironment
 
     def generateBatchDataIterator(self):
-
-        Nbatch = self.Nbatch
-        idxAvailable = self.getAvailableIndex("train") # (N0+N1, Navailable) 
-        Navailable = idxAvailable.shape[1]
         
-        for _ in range(Navailable//Nbatch):
-            idx = idxAvailable[:, np.random.randint(low=0, high=Navailable, size=(Nbatch,))] # (N0+N1, *)
-            yield self.extractBatchData(idx)
+        raise NotImplementedError()
     
     def getTestBatchData(self):
         

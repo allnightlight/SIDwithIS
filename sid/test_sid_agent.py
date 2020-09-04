@@ -11,6 +11,7 @@ from sid_agent import SidAgent
 from sid_agent001 import SidAgent001
 from sid_batch_data_agent import SidBatchDataAgent
 from sid_environment_abstract import SidEnvironmentAbstract
+from sid_environment_normal_sampling import SidEnvironmentNormalSampling
 
 
 class Test(unittest.TestCase):
@@ -22,7 +23,7 @@ class Test(unittest.TestCase):
         Nu = 3
         
         dataGeneratorSingleton = DataGeneratorAbstractSingleton(2**10, 2, 3)
-        environment = SidEnvironmentAbstract(dataGeneratorSingleton, Ntrain=2**9, Nbatch=2**5, N0=2**2, N1=2**2, sampling_balance=0.5)
+        environment = SidEnvironmentNormalSampling(dataGeneratorSingleton, Ntrain=2**9, Nbatch=2**5, N0=2**2, N1=2**2)
         assert isinstance(environment, SidEnvironmentAbstract)
         
         params1 = dict(Ny=Ny, Nu=Nu, Nhidden=2**3, use_offset_compensate = True)
