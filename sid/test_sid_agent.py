@@ -5,11 +5,13 @@ Created on 2020/07/16
 '''
 import unittest
 
+from data_generator_abstract_singleton import DataGeneratorAbstractSingleton
 import numpy as np
 from sid_agent import SidAgent
 from sid_agent001 import SidAgent001
 from sid_batch_data_agent import SidBatchDataAgent
-from sid_environment import SidEnvironment
+from sid_environment_abstract import SidEnvironmentAbstract
+from sid_environment_normal_sampling import SidEnvironmentNormalSampling
 
 
 class Test(unittest.TestCase):
@@ -20,7 +22,9 @@ class Test(unittest.TestCase):
         Ny = 2
         Nu = 3
         
-        environment = SidEnvironment(Nhidden=2**2, Ntrain=2**10, Ntest =2**5, T0=2**3, T1=2**4, Ny=Ny, Nu=Nu, Nbatch=2**5, N0=2**3, N1=2**2, seed = 1)
+        dataGeneratorSingleton = DataGeneratorAbstractSingleton(2**10, 2, 3)
+        environment = SidEnvironmentNormalSampling(dataGeneratorSingleton, Ntrain=2**9, Nbatch=2**5, N0=2**2, N1=2**2)
+        assert isinstance(environment, SidEnvironmentAbstract)
         
         params1 = dict(Ny=Ny, Nu=Nu, Nhidden=2**3, use_offset_compensate = True)
         params2 = dict(Ny=Ny, Nu=Nu, Nhidden=2**3, use_offset_compensate = False)
