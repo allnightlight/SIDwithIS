@@ -23,6 +23,7 @@ class Test(unittest.TestCase):
         Nu = 3
         
         dataGeneratorSingleton = DataGeneratorAbstractSingleton(Nsample, Ny, Nu)
+        dataGeneratorSingleton.loadData()
         environment = SidEnvironmentNormalSampling(dataGeneratorSingleton, Ntrain=2**9, Nbatch=2**5, N0=2**2, N1=2**2)
         assert isinstance(environment, SidEnvironmentAbstract)
 

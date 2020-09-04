@@ -23,6 +23,7 @@ class SidEnvironmentFactory(SlEnvironmentFactory):
         
         dataGeneratorSingleton = self.createDataGeneratorSingleton(buildParameter)
         assert isinstance(dataGeneratorSingleton, DataGeneratorAbstractSingleton)
+        dataGeneratorSingleton.loadData()
         
         if buildParameter.use_imbalanced_sampling:
             environment = SidEnvironmentImbalancedSampling(dataGeneratorSingleton
