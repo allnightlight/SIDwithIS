@@ -27,6 +27,7 @@ class SidEnvironmentAbstract(SlEnvironment):
         self.Nu = dataGeneratorSingleton.Nu
         
         self.dataGeneratorSingleton = dataGeneratorSingleton
+        assert Ntrain < dataGeneratorSingleton.Nsample
         self.Ntrain = Ntrain
         self.Nbatch = Nbatch
         self.N0 = N0 # estimation horizon's length
@@ -52,12 +53,12 @@ class SidEnvironmentAbstract(SlEnvironment):
             Ev0batch = self.dataGeneratorSingleton.Ev[idx[:N0,:]] # (N0, *)
             Ev1batch = self.dataGeneratorSingleton.Ev[idx[N0:,:]] # (N1, *)
             
-            _U0 = torch.tensor(U0batch)
-            _U1 = torch.tensor(U1batch)
-            _Ev0 = torch.tensor(Ev0batch)
-            _Ev1 = torch.tensor(Ev1batch)
-            _Y0 = torch.tensor(Y0batch)
-            _Y2 = torch.tensor(Y2batch)
+            _U0 = torch.tensor(U0batch.astype(np.float32))
+            _U1 = torch.tensor(U1batch.astype(np.float32))
+            _Ev0 = torch.tensor(Ev0batch.astype(np.float32))
+            _Ev1 = torch.tensor(Ev1batch.astype(np.float32))
+            _Y0 = torch.tensor(Y0batch.astype(np.float32))
+            _Y2 = torch.tensor(Y2batch.astype(np.float32))
             
             batchDataEnvironment = SidBatchDataEnvironment( _U0, _Ev0, _Y0, _U1, _Ev1, _Y2)
             
@@ -79,12 +80,12 @@ class SidEnvironmentAbstract(SlEnvironment):
         Ev0batch = self.dataGeneratorSingleton.Ev[idx[:N0,:]] # (N0, *)
         Ev1batch = self.dataGeneratorSingleton.Ev[idx[N0:,:]] # (N1, *)
 
-        _U0 = torch.tensor(U0batch)
-        _U1 = torch.tensor(U1batch)
-        _Ev0 = torch.tensor(Ev0batch)
-        _Ev1 = torch.tensor(Ev1batch)
-        _Y0 = torch.tensor(Y0batch)
-        _Y2 = torch.tensor(Y2batch)
+        _U0 = torch.tensor(U0batch.astype(np.float32))
+        _U1 = torch.tensor(U1batch.astype(np.float32))
+        _Ev0 = torch.tensor(Ev0batch.astype(np.float32))
+        _Ev1 = torch.tensor(Ev1batch.astype(np.float32))
+        _Y0 = torch.tensor(Y0batch.astype(np.float32))
+        _Y2 = torch.tensor(Y2batch.astype(np.float32))
                 
         batchDataEnvironment = SidBatchDataEnvironment( _U0, _Ev0, _Y0, _U1, _Ev1, _Y2)
         

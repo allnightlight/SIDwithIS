@@ -47,15 +47,19 @@ class Test(unittest.TestCase):
         for k1 in range(2):
             nIntervalSave = 3
             nEpoch = 5
-            self.buildParameters.append(SidBuildParameter(int(nIntervalSave), int(nEpoch), label="test" + str(k1)))
-
-#         for agentClass in ("agent002", "agent003", "agent004"): 
-#             self.buildParameters.append(SidBuildParameter(int(nIntervalSave), int(nEpoch), agentClass = agentClass, label="test " + agentClass))
+            self.buildParameters.append(SidBuildParameter(nIntervalSave=nIntervalSave
+                                                          , Ntrain=2**7
+                                                          , nEpoch=nEpoch
+                                                          , label="test" + str(k1)))
 
         for k1 in range(2):
             nIntervalSave = 3
             nEpoch = 5
-            self.buildParameters.append(SidBuildParameter(int(nIntervalSave), int(nEpoch), label="test" + str(k1), environmentClass="SidEnvironmentImbalancedSampling"))            
+            self.buildParameters.append(SidBuildParameter(nIntervalSave=nIntervalSave
+                                                          , Ntrain=2**7
+                                                          , nEpoch=nEpoch                                                          
+                                                          , label="test" + str(k1)
+                                                          , environmentClass="SidEnvironmentImbalancedSampling"))            
         
         self.loader = Loader(agentFactory, buildParameterFactory, environmentFactory, trainerFactory, store)
         

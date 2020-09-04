@@ -20,7 +20,7 @@ class SidAgentFactory(SlAgentFactory):
         
         agent = None
         if buildParameter.agentClass == "agent001":
-            agent = SidAgent001(Ny = buildParameter.Ny, Nu = buildParameter.Nu, Nhidden = buildParameter.NhiddenAgent, use_offset_compensate=buildParameter.use_offset_compensate)
+            agent = SidAgent001(Ny = environment.Ny, Nu = environment.Nu, Nhidden = buildParameter.NhiddenAgent, use_offset_compensate=buildParameter.use_offset_compensate)
         assert agent is not None
         
         return agent
