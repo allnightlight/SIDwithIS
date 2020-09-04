@@ -28,18 +28,21 @@ class DataGeneratorAbstractSingleton(object):
         return _inst
         
         
-    def __init__(self, Nsample, Ny, Nu):
+    def __init__(self, Nsample=None, Ny=None, Nu=None):
         
         self.Nsample = Nsample
         self.Ny = Ny
         self.Nu = Nu
         
+        
+    def loadData(self):
         rstate = np.random.RandomState(seed=0)
         
-        self.Y = rstate.randn(Nsample, Ny) # (Nsample, Ny)
-        self.U = rstate.randn(Nsample, Nu) # (Nsample, Nu)
-        self.Ev = rstate.randint(2, size=(Nsample,)) # (Nsample,)
-        self.IsNaN = rstate.rand(Nsample) < 1/2**4 # (Nsample,)
-        
+        self.Y = rstate.randn(self.Nsample, self.Ny) # (Nsample, Ny)
+        self.U = rstate.randn(self.Nsample, self.Nu) # (Nsample, Nu)
+        self.Ev = rstate.randint(2, size=(self.Nsample,)) # (Nsample,)
+        self.IsNaN = rstate.rand(self.Nsample) < 1/2**4 # (Nsample,)
+
+        pass
 
         
