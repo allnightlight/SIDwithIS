@@ -9,6 +9,7 @@ from data_generator_abstract_singleton import DataGeneratorAbstractSingleton
 from sid_batch_data_environment import SidBatchDataEnvironment
 from sid_environment_abstract import SidEnvironmentAbstract
 from sid_environment_normal_sampling import SidEnvironmentNormalSampling
+from sid_environment_imbalanced_sampling import SidEnvironmentImbalancedSampling
 
 
 class Test(unittest.TestCase):
@@ -31,6 +32,15 @@ class Test(unittest.TestCase):
         
         dataGeneratorSingleton = DataGeneratorAbstractSingleton(2**10, 2, 3)
         environment = SidEnvironmentNormalSampling(dataGeneratorSingleton, Ntrain=2**9, Nbatch=2**5, N0=2**2, N1=2**2)
+        assert isinstance(environment, SidEnvironmentAbstract)
+        
+        for batchDataEnvironment in environment.generateBatchDataIterator():
+            assert isinstance(batchDataEnvironment, SidBatchDataEnvironment)
+
+    def test004(self):
+        
+        dataGeneratorSingleton = DataGeneratorAbstractSingleton(2**10, 2, 3)
+        environment = SidEnvironmentImbalancedSampling(dataGeneratorSingleton, Ntrain=2**9, Nbatch=2**5, N0=2**2, N1=2**2, sampling_balance=0.5)
         assert isinstance(environment, SidEnvironmentAbstract)
         
         for batchDataEnvironment in environment.generateBatchDataIterator():

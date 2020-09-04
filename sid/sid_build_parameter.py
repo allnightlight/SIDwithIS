@@ -23,7 +23,8 @@ class SidBuildParameter(SlBuildParameter):
                  , N1=2**0
                  , Ntrain=2**7
                  , dampingConstantInitial=0.99
-                 , use_offset_compensate=False):        
+                 , use_offset_compensate=False
+                 , use_imbalanced_sampling=False):        
         SlBuildParameter.__init__(self, nIntervalSave=nIntervalSave, nEpoch=nEpoch, label=label)
 
         self.sampling_balance = sampling_balance        
@@ -35,3 +36,4 @@ class SidBuildParameter(SlBuildParameter):
         self.Ntrain = Ntrain        
         self.dampingConstantInitial = dampingConstantInitial
         self.use_offset_compensate = use_offset_compensate
+        self.use_imbalanced_sampling = use_imbalanced_sampling
