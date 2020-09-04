@@ -16,11 +16,13 @@ class SidEnvironmentFactory(SlEnvironmentFactory):
     '''
 
 
+    # <<public, final>>
     def create(self, buildParameter):
         
         assert isinstance(buildParameter, SidBuildParameter)
         
-        dataGeneratorSingleton = DataGeneratorAbstractSingleton(Nsample=2**10, Ny=2, Nu=3)
+        dataGeneratorSingleton = self.createDataGeneratorSingleton(buildParameter)
+        assert isinstance(dataGeneratorSingleton, DataGeneratorAbstractSingleton)
         
         if buildParameter.use_imbalanced_sampling:
             environment = SidEnvironmentImbalancedSampling(dataGeneratorSingleton
@@ -37,3 +39,8 @@ class SidEnvironmentFactory(SlEnvironmentFactory):
                                    , N1 = buildParameter.N1)
         
         return environment
+    
+    # <<protected>>
+    def createDataGeneratorSingleton(self, buildParameter):
+        dataGeneratorSingleton = DataGeneratorAbstractSingleton.getInstance(Nsample=buildParameter.Ntrain+2**7, Ny=2, Nu=3)
+        return dataGeneratorSingleton
