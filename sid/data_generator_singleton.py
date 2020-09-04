@@ -4,29 +4,16 @@ Created on 2020/07/16
 @author: ukai
 '''
 
-import json
 
 import numpy as np
+from data_generator_abstract_singleton import DataGeneratorAbstractSingleton
 
 
-class DataGeneratorSingleton(object):
+class DataGeneratorSingleton(DataGeneratorAbstractSingleton):
     '''
     classdocs
     '''
-    
-    _instances = {}
-    
-    @classmethod
-    def getInstance(cls, **params):
-        key = json.dumps(params)
-        
-        if key in cls._instances:
-            _inst = cls._instances[key]
-        else:
-            _inst = cls(**params)
-            cls._instances[key] = _inst
-        return _inst
-        
+            
     def __init__(self, Nhidden, Ntrain = 2**12, T0 = 2**1, T1 = 2**7, 
         Ny = None, Nu = None, Nw = None, prob_step = 1/2**4, action_distribution = "normal", amp_dv = 1.0, seed = 0):
         

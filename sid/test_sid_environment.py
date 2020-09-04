@@ -10,6 +10,7 @@ import numpy as np
 from sid_batch_data_environment import SidBatchDataEnvironment
 from sid_environment import SidEnvironment
 from sid_environment_imbalanced_sampling import SidEnvironmentImbalancedSampling
+from data_generator_from_csv_singleton import DataGeneratorFromCsvSingleton
 
 
 class Test(unittest.TestCase):
@@ -19,7 +20,7 @@ class Test(unittest.TestCase):
         
         for _ in range(10):
             dg = DataGeneratorSingleton.getInstance(Nhidden=2**2, Ntrain=2**10, T0=2**3, T1=2**4, Ny=1, Nu=1, seed = 0)
-            
+    
             dg = DataGeneratorSingleton.getInstance(Nhidden=2**2, Ntrain=2**10, T0=2**3, T1=2**4, Ny=1, Nu=1, seed = 1)
             
         
@@ -56,6 +57,10 @@ class Test(unittest.TestCase):
                 assert np.all(batchDataEnvironment._Y2.shape[0:2] == (N1+1, Nbatch))
                 assert np.all(batchDataEnvironment._U1.shape[0:2] == (N1, Nbatch))
             environment.getTestBatchData()
+
+    def test006(self):
+        
+        dg = DataGeneratorFromCsvSingleton("data.csv")
     
 if __name__ == "__main__":
     #import sys;sys.argv = ['', 'Test.test001']
