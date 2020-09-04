@@ -5,15 +5,14 @@ Created on 2020/07/16
 '''
 import unittest
 
+from data_generator_abstract_singleton import DataGeneratorAbstractSingleton
+from data_generator_from_csv_singleton import DataGeneratorFromCsvSingleton
 from data_generator_singleton import DataGeneratorSingleton
 import numpy as np
 from sid_batch_data_environment import SidBatchDataEnvironment
 from sid_environment import SidEnvironment
-from sid_environment_imbalanced_sampling import SidEnvironmentImbalancedSampling
-from data_generator_from_csv_singleton import DataGeneratorFromCsvSingleton
-from data_generator_abstract_singleton import DataGeneratorAbstractSingleton
 from sid_environment_abstract import SidEnvironmentAbstract
-from builtins import isinstance
+from sid_environment_imbalanced_sampling import SidEnvironmentImbalancedSampling
 
 
 class Test(unittest.TestCase):
@@ -73,6 +72,9 @@ class Test(unittest.TestCase):
         dataGeneratorSingleton = DataGeneratorAbstractSingleton(2**10, 2, 3)
         environment = SidEnvironmentAbstract(dataGeneratorSingleton, Ntrain=2**9, Nbatch=2**5, N0=2**2, N1=2**2, sampling_balance=0.5)
         assert isinstance(environment, SidEnvironmentAbstract)
+        
+        for batchDataEnvironment in environment.generateBatchDataIterator():
+            assert isinstance(batchDataEnvironment, SidBatchDataEnvironment)
 
     
 if __name__ == "__main__":
