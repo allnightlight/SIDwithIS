@@ -45,7 +45,7 @@ class SidEnvironmentAbstract(SlEnvironment):
             idx =np.arange(self.N0, self.Ntrain-self.N1) # (* = Ntrain-N0-N1)
         
         if segment == "test":
-            idx =np.arange(self.Ntrain+self.N0, self.Nsample-self.N0-self.N1) # (* = Ntest-N0-N1)
+            idx =np.arange(self.Ntrain+self.N0, self.Nsample-self.N1) # (* = Ntest-N0-N1)
         
         idx = idx.reshape((1,-1)) + np.arange(-self.N0, self.N1).reshape((-1, 1)) # (N0+N1, *)
         idxAvailable = idx[:, ~np.any(self.dataGeneratorSingleton.IsNaN[idx], axis=0)] # (N0+N1, Navailable), * = Navailable + #NaN

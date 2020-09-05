@@ -82,6 +82,17 @@ class Test(unittest.TestCase):
                 assert not np.any(np.isnan(X))
         assert cnt > 0
 
+    def test005(self):
+        dataGeneratorSingleton = DataGeneratorAbstractSingleton.getInstance(Nsample=2**10, Ny=2, Nu=3)
+        dataGeneratorSingleton.loadData()
+        environment = SidEnvironmentImbalancedSampling(dataGeneratorSingleton, Ntrain=2**9, Nbatch=2**5, N0=2**2, N1=2**2, sampling_balance=0.5)
+        assert isinstance(environment, SidEnvironmentAbstract)
+        
+        idxTrain = environment.getAvailableIndex("train")
+        idxTest = environment.getAvailableIndex("test")
+        
+        assert np.max(idxTrain) < np.min(idxTest)
+        
     
 if __name__ == "__main__":
     #import sys;sys.argv = ['', 'Test.test001']
