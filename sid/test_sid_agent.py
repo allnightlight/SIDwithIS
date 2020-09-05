@@ -36,6 +36,8 @@ class Test(unittest.TestCase):
                 batchDataOut = agent(batchDataIn)
                 
                 assert isinstance(batchDataOut, SidBatchDataAgent)
+                
+                assert batchDataOut.T is not None
         
 
     def test002(self):

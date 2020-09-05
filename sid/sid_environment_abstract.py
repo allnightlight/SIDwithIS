@@ -67,6 +67,10 @@ class SidEnvironmentAbstract(SlEnvironment):
         Ev0batch = self.dataGeneratorSingleton.Ev[idx[:N0,:]] # (N0, *)
         Ev1batch = self.dataGeneratorSingleton.Ev[idx[N0:,:]] # (N1, *)
         
+        T0 = self.dataGeneratorSingleton.T[idx[:N0,:]] # (N0,*)
+        T2 = self.dataGeneratorSingleton.T[idx[(N0-1):,:]] # (N2,*)
+        
+        
         _U0 = torch.tensor(U0batch.astype(np.float32))
         _U1 = torch.tensor(U1batch.astype(np.float32))
         _Ev0 = torch.tensor(Ev0batch.astype(np.float32))
@@ -74,7 +78,7 @@ class SidEnvironmentAbstract(SlEnvironment):
         _Y0 = torch.tensor(Y0batch.astype(np.float32))
         _Y2 = torch.tensor(Y2batch.astype(np.float32))
         
-        batchDataEnvironment = SidBatchDataEnvironment( _U0, _Ev0, _Y0, _U1, _Ev1, _Y2)
+        batchDataEnvironment = SidBatchDataEnvironment( _U0, _Ev0, _Y0, _U1, _Ev1, _Y2, T0, T2)
         
         return batchDataEnvironment
 

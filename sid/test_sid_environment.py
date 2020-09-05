@@ -3,6 +3,7 @@ Created on 2020/07/16
 
 @author: ukai
 '''
+import numpy as np
 import unittest
 
 from data_generator_abstract_singleton import DataGeneratorAbstractSingleton
@@ -37,9 +38,24 @@ class Test(unittest.TestCase):
         environment = SidEnvironmentNormalSampling(dataGeneratorSingleton, Ntrain=2**9, Nbatch=2**5, N0=2**2, N1=2**2)
         assert isinstance(environment, SidEnvironmentAbstract)
         
+        cnt = 0
         for batchDataEnvironment in environment.generateBatchDataIterator():
             assert isinstance(batchDataEnvironment, SidBatchDataEnvironment)
-
+            cnt += 1
+            
+            assert batchDataEnvironment.T0 is not None
+            assert batchDataEnvironment.T2 is not None
+            
+            for _X in (batchDataEnvironment._Ev0
+                       , batchDataEnvironment._Ev1
+                       , batchDataEnvironment._U0
+                       , batchDataEnvironment._U1
+                       , batchDataEnvironment._Y0
+                       , batchDataEnvironment._Y2):
+                X = _X.data.numpy().flatten() # (*,)
+                assert not np.any(np.isnan(X))
+        assert cnt > 0
+                
     def test004(self):
         
         dataGeneratorSingleton = DataGeneratorAbstractSingleton(2**10, 2, 3)
@@ -47,8 +63,24 @@ class Test(unittest.TestCase):
         environment = SidEnvironmentImbalancedSampling(dataGeneratorSingleton, Ntrain=2**9, Nbatch=2**5, N0=2**2, N1=2**2, sampling_balance=0.5)
         assert isinstance(environment, SidEnvironmentAbstract)
         
+        cnt = 0
         for batchDataEnvironment in environment.generateBatchDataIterator():
             assert isinstance(batchDataEnvironment, SidBatchDataEnvironment)
+            cnt += 1
+            
+            assert batchDataEnvironment.T0 is not None
+            assert batchDataEnvironment.T2 is not None
+
+            
+            for _X in (batchDataEnvironment._Ev0
+                       , batchDataEnvironment._Ev1
+                       , batchDataEnvironment._U0
+                       , batchDataEnvironment._U1
+                       , batchDataEnvironment._Y0
+                       , batchDataEnvironment._Y2):
+                X = _X.data.numpy().flatten() # (*,)
+                assert not np.any(np.isnan(X))
+        assert cnt > 0
 
     
 if __name__ == "__main__":
