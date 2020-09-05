@@ -40,9 +40,13 @@ class DataGeneratorAbstractSingleton(object):
         
         self.Y = rstate.randn(self.Nsample, self.Ny) # (Nsample, Ny)
         self.U = rstate.randn(self.Nsample, self.Nu) # (Nsample, Nu)
-        self.Ev = rstate.randint(2, size=(self.Nsample,)) # (Nsample,)
+        self.Ev = rstate.randint(2, size=(self.Nsample,)).astype(np.float) # (Nsample,)
         self.IsNaN = rstate.rand(self.Nsample) < 1/2**4 # (Nsample,)
-
+        
+        self.Y[self.IsNaN,:] = np.nan
+        self.U[self.IsNaN,:] = np.nan
+        self.Ev[self.IsNaN] = np.nan
+        
         pass
 
         
