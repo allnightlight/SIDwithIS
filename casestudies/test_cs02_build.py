@@ -5,6 +5,7 @@ Created on 2020/07/11
 '''
 import os
 import unittest
+import numpy as np
 
 from builder import Builder
 from loader import Loader
@@ -25,13 +26,41 @@ class Test(unittest.TestCase):
     
     
     @classmethod
+    def generateTestData(cls):
+        
+        Nsample = 2**10
+        Nu = 2
+        Ny = 3
+        
+        Timestamp = np.arange(Nsample)
+        U = np.random.randn(Nsample, Nu)
+        Y = np.random.randn(Nsample, Ny)
+        Ev = np.random.randint(2, size=(Nsample,))
+        
+        Y[np.random.rand(Nsample, Ny) < 1/2**4] = np.nan
+        
+        tbl = []
+        header = ["timestamp", "event",] + ["U%d" % k1 for k1 in range(Nu)] + ["Y%d" % k1 for k1 in range(Ny)]
+        tbl.append(header)
+        for seg, ev, u, y in zip(Timestamp, Ev.astype(np.int), U, Y):    
+            row = [seg, ev, *u, *y]
+            tbl.append(row)
+        
+        with open(cls.dataFilePath, "w") as fp:
+            fp.write(",".join(header)+"\n")
+            for line in tbl[1:]:
+                fp.write(",".join([str(elm) for elm in line])+"\n")
+    
+    @classmethod
     def setUpClass(cls):
         super(Test, cls).setUpClass()
         
         cls.dbPath = "testDb.sqlite"
         if os.path.exists(cls.dbPath):
             os.remove(cls.dbPath)
-    
+        cls.dataFilePath = "test_data.csv"
+        cls.generateTestData()
+        
     def setUp(self):
         unittest.TestCase.setUp(self)
         
@@ -51,13 +80,15 @@ class Test(unittest.TestCase):
             self.buildParameters.append(Cs02BuildParameter(nIntervalSave=nIntervalSave
                                                           , Ntrain=2**7
                                                           , nEpoch=nEpoch
-                                                          , label="test" + str(k1)))
+                                                          , label="test" + str(k1)
+                                                          , dataFilePath = self.dataFilePath))
             
             self.buildParameters.append(Cs02BuildParameter(nIntervalSave=nIntervalSave
                                               , Ntrain=2**7
                                               , nEpoch=nEpoch
                                               , label="test imbalanced sampling" + str(k1)
-                                              , use_imbalanced_sampling = True))
+                                              , use_imbalanced_sampling = True
+                                              , dataFilePath = self.dataFilePath))
 
         
         self.loader = Loader(agentFactory, buildParameterFactory, environmentFactory, trainerFactory, store)
@@ -68,6 +99,8 @@ class Test(unittest.TestCase):
         cls.dbPath = "testDb.sqlite"
         if os.path.exists(cls.dbPath):
             os.remove(cls.dbPath)
+        if os.path.exists(cls.dataFilePath):
+            os.remove(cls.dataFilePath)
 
     def test001(self):
         
