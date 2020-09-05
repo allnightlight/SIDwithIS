@@ -9,20 +9,48 @@ import numpy as np
 from data_generator_abstract_singleton import DataGeneratorAbstractSingleton
 
 
-class DataGeneratorSingleton(DataGeneratorAbstractSingleton):
+class Cs01DataGeneratorSingleton(DataGeneratorAbstractSingleton):
     '''
     classdocs
     '''
-            
-    def __init__(self, Nhidden, Ntrain = 2**12, T0 = 2**1, T1 = 2**7, 
-        Ny = None, Nu = None, Nw = None, prob_step = 1/2**4, action_distribution = "normal", amp_dv = 1.0, seed = 0):
+    
+    def __init__(self, Nhidden=2**3, Nsample = 2**11, T0 = 2**2, T1 = 2**7, 
+        Ny = 1, Nu = 1, Nw = 1, prob_step = 1/2**5, action_distribution = "step", amp_dv = 1.0, seed = 0):
+        
+        DataGeneratorAbstractSingleton.__init__(self)
+        
+        self.Nhidden = Nhidden
+        self.Nsample = Nsample
+        self.T0 = T0
+        self.T1 = T1
+        self.Ny = Ny
+        self.Nu = Nu
+        self.Nw = Nw
+        self.prob_step = prob_step
+        self.action_distribution = action_distribution
+        self.amp_dv = amp_dv
+        self.seed = seed        
+        
+    def loadDataReal(self):
+        
+        Nhidden = self.Nhidden
+        Nsample = self.Nsample
+        T0 = self.T0
+        T1 = self.T1
+        Ny = self.Ny
+        Nu = self.Nu
+        Nw = self.Nw
+        prob_step = self.prob_step
+        action_distribution = self.action_distribution
+        amp_dv = self.amp_dv
+        seed = self.seed        
         
         print("""\
         
         ========================
         DataGeneratorSingleton's constructor was called with the following parameters:
         Nhidden: {0}
-        Ntrain: {1}
+        Nsample: {1}
         T0: {2}
         T1: {3}
         Ny: {4}
@@ -33,7 +61,7 @@ class DataGeneratorSingleton(DataGeneratorAbstractSingleton):
         seed: {9}
         ========================        
         
-        """.format(Nhidden, Ntrain, T0, T1, Ny, Nu, Nw, action_distribution, amp_dv, seed))
+        """.format(Nhidden, Nsample, T0, T1, Ny, Nu, Nw, action_distribution, amp_dv, seed))
         
         rstate = np.random.RandomState(seed)
         
@@ -64,7 +92,7 @@ class DataGeneratorSingleton(DataGeneratorAbstractSingleton):
             U = []
             Ev = []
             u = np.zeros(Nu) # (Nu)
-            for k1 in range(Ntrain):
+            for k1 in range(Nsample):
                 r = rstate.rand(Nu) < prob_step
                 u[r] = 1 - u[r]
                 U.append(u.copy())
@@ -74,12 +102,12 @@ class DataGeneratorSingleton(DataGeneratorAbstractSingleton):
             #--------------#
             
         if action_distribution == "normal":
-            U = rstate.randn(Ntrain, Nu)
-            Ev = np.ones(Ntrain) # (Ntrain)
+            U = rstate.randn(Nsample, Nu)
+            Ev = np.ones(Nsample) # (Nsample)
             
-        W = rstate.randn(Ntrain, Nw) * amp_dv
+        W = rstate.randn(Nsample, Nw) * amp_dv
         UW = np.concatenate((U, W), axis=-1)        
-        for k1 in range(Ntrain):
+        for k1 in range(Nsample):
             uw = UW[k1,:]
             x = np.dot(A, x) + np.dot(B, uw)
             X.append(x)
@@ -94,7 +122,5 @@ class DataGeneratorSingleton(DataGeneratorAbstractSingleton):
         self.Ev = Ev
         self.W = W.astype(np.float32) # W should not be used.
         self.Y = Y.astype(np.float32)
-        self.Ntrain = Ntrain
-        self.Nhidden = Nhidden
-        self.Nu = Nu
-        self.Ny = Ny
+        self.T = np.arange(Nsample)
+        self.IsNaN = np.zeros(Nsample)

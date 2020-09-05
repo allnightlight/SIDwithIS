@@ -1,8 +1,9 @@
 '''
-Created on 2020/07/11
+Created on 2020/09/05
 
 @author: ukai
 '''
+
 import os
 import unittest
 
@@ -16,9 +17,9 @@ from sid_trainer_factory import SidTrainerFactory
 from store import Store
 from sid_evaluator import SidEvaluator
 from builtins import isinstance
-from cs02_environment_factory import Cs02EnvironmentFactory
-from cs02_build_parameter_factory import Cs02BuildParameterFactory
-from cs02_build_parameter import Cs02BuildParameter
+from cs01_environment_factory import Cs01EnvironmentFactory
+from cs01_build_parameter_factory import Cs01BuildParameterFactory
+from cs01_build_parameter import Cs01BuildParameter
 
 
 class Test(unittest.TestCase):
@@ -31,15 +32,16 @@ class Test(unittest.TestCase):
         cls.dbPath = "testDb.sqlite"
         if os.path.exists(cls.dbPath):
             os.remove(cls.dbPath)
+        cls.trainLogFolderPath = "trainLogCs01" 
     
     def setUp(self):
         unittest.TestCase.setUp(self)
         
         agentFactory = SidAgentFactory()
-        environmentFactory = Cs02EnvironmentFactory()
+        environmentFactory = Cs01EnvironmentFactory()
         trainerFactory = SidTrainerFactory()
-        buildParameterFactory = Cs02BuildParameterFactory()
-        store = Store(self.dbPath, trainLogFolderPath="trainLogCs02")
+        buildParameterFactory = Cs01BuildParameterFactory()
+        store = Store(self.dbPath, trainLogFolderPath=self.trainLogFolderPath)
         logger = MyLogger(console_print=True)
         
         self.builder = Builder(trainerFactory, agentFactory, environmentFactory, store, logger)
@@ -48,16 +50,18 @@ class Test(unittest.TestCase):
         for k1 in range(2):
             nIntervalSave = 3
             nEpoch = 5
-            self.buildParameters.append(Cs02BuildParameter(nIntervalSave=nIntervalSave
+            self.buildParameters.append(Cs01BuildParameter(nIntervalSave=nIntervalSave
                                                           , Ntrain=2**7
                                                           , nEpoch=nEpoch
-                                                          , label="test" + str(k1)))
+                                                          , label="test" + str(k1)
+                                                          , seed = k1))
             
-            self.buildParameters.append(Cs02BuildParameter(nIntervalSave=nIntervalSave
+            self.buildParameters.append(Cs01BuildParameter(nIntervalSave=nIntervalSave
                                               , Ntrain=2**7
                                               , nEpoch=nEpoch
                                               , label="test imbalanced sampling" + str(k1)
-                                              , use_imbalanced_sampling = True))
+                                              , use_imbalanced_sampling = True
+                                              , seed = k1))
 
         
         self.loader = Loader(agentFactory, buildParameterFactory, environmentFactory, trainerFactory, store)
@@ -65,9 +69,8 @@ class Test(unittest.TestCase):
     @classmethod
     def tearDownClass(cls):
         super(Test, cls).tearDownClass()
-        cls.dbPath = "testDb.sqlite"
         if os.path.exists(cls.dbPath):
-            os.remove(cls.dbPath)
+            os.remove(cls.dbPath)    
 
     def test001(self):
         
