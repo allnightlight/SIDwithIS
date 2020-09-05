@@ -13,7 +13,7 @@ class SidBatchDataAgent(BatchDataAgent):
     '''
 
 
-    def __init__(self, _Yhat, T=None):
+    def __init__(self, _Yhat, T):
         # _Y: (N2 = 1 + N1, *, Ny), T: (N2, *)
         assert len(_Yhat.shape) == 3
         

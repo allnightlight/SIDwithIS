@@ -43,6 +43,9 @@ class Test(unittest.TestCase):
             assert isinstance(batchDataEnvironment, SidBatchDataEnvironment)
             cnt += 1
             
+            assert batchDataEnvironment.T0 is not None
+            assert batchDataEnvironment.T2 is not None
+            
             for _X in (batchDataEnvironment._Ev0
                        , batchDataEnvironment._Ev1
                        , batchDataEnvironment._U0
@@ -64,6 +67,10 @@ class Test(unittest.TestCase):
         for batchDataEnvironment in environment.generateBatchDataIterator():
             assert isinstance(batchDataEnvironment, SidBatchDataEnvironment)
             cnt += 1
+            
+            assert batchDataEnvironment.T0 is not None
+            assert batchDataEnvironment.T2 is not None
+
             
             for _X in (batchDataEnvironment._Ev0
                        , batchDataEnvironment._Ev1

@@ -78,6 +78,6 @@ class SidAgent001(SidAgent, nn.Module):
         if self.use_offset_compensate:
             _Yhat2 = _Yhat2 + _yOffset # (N2, *, Ny)
         
-        batchDataOut = SidBatchDataAgent(_Yhat2)
+        batchDataOut = SidBatchDataAgent(_Yhat2, T = batchDataIn.T2)
 
         return batchDataOut

@@ -37,7 +37,8 @@ class DataGeneratorAbstractSingleton(object):
         
     def loadData(self):
         rstate = np.random.RandomState(seed=0)
-        
+
+        self.T = np.arange(self.Nsample) # (Nsample,)        
         self.Y = rstate.randn(self.Nsample, self.Ny) # (Nsample, Ny)
         self.U = rstate.randn(self.Nsample, self.Nu) # (Nsample, Nu)
         self.Ev = rstate.randint(2, size=(self.Nsample,)).astype(np.float) # (Nsample,)
