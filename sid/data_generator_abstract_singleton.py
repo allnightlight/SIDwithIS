@@ -33,9 +33,25 @@ class DataGeneratorAbstractSingleton(object):
         self.Nsample = Nsample
         self.Ny = Ny
         self.Nu = Nu
-        
+        self.alreadyLoaded = False
         
     def loadData(self):
+        if self.alreadyLoaded:
+            # skipped
+            pass
+        else:
+            self.loadDataReal()
+            self.alreadyLoaded = True
+        
+    def loadDataReal(self):
+        
+        print("""
+Test data will be loaded with the following parameters:
+    Nsample:   {0}
+    Ny:        {1}
+    Nu:        {2}
+        """.format(self.Nsample, self.Ny, self.Nu))
+        
         rstate = np.random.RandomState(seed=0)
 
         self.T = np.arange(self.Nsample) # (Nsample,)        

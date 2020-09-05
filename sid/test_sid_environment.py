@@ -25,7 +25,7 @@ class Test(unittest.TestCase):
         
     def test002(self):
         
-        dataGeneratorSingleton = DataGeneratorAbstractSingleton(2**10, 2, 3)
+        dataGeneratorSingleton = DataGeneratorAbstractSingleton.getInstance(Nsample=2**10, Ny=2, Nu=3)
         dataGeneratorSingleton.loadData()
         environment = SidEnvironmentAbstract(dataGeneratorSingleton, Ntrain=2**9, Nbatch=2**5, N0=2**2, N1=2**2)
         assert isinstance(environment, SidEnvironmentAbstract)
@@ -33,7 +33,7 @@ class Test(unittest.TestCase):
 
     def test003(self):
         
-        dataGeneratorSingleton = DataGeneratorAbstractSingleton(2**10, 2, 3)
+        dataGeneratorSingleton = DataGeneratorAbstractSingleton.getInstance(Nsample=2**10, Ny=2, Nu=3)
         dataGeneratorSingleton.loadData()
         environment = SidEnvironmentNormalSampling(dataGeneratorSingleton, Ntrain=2**9, Nbatch=2**5, N0=2**2, N1=2**2)
         assert isinstance(environment, SidEnvironmentAbstract)
@@ -58,7 +58,7 @@ class Test(unittest.TestCase):
                 
     def test004(self):
         
-        dataGeneratorSingleton = DataGeneratorAbstractSingleton(2**10, 2, 3)
+        dataGeneratorSingleton = DataGeneratorAbstractSingleton.getInstance(Nsample=2**10, Ny=2, Nu=3)
         dataGeneratorSingleton.loadData()
         environment = SidEnvironmentImbalancedSampling(dataGeneratorSingleton, Ntrain=2**9, Nbatch=2**5, N0=2**2, N1=2**2, sampling_balance=0.5)
         assert isinstance(environment, SidEnvironmentAbstract)
