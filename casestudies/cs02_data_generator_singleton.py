@@ -60,7 +60,7 @@ class Cs02DataGeneratorSingleton(DataGeneratorAbstractSingleton):
         self.Ev = Ev # (N,)
         self.U = U # (N, Nu)
         self.Y = Y # (N, Ny)
-        self.Timestamp = Timestamp # (N,)
+        self.T = Timestamp # (N,)
         self.IsNaN = IsNaN # (N,)
         self.Nsample = Timestamp.shape[0]
         self.Ny = Y.shape[1]
