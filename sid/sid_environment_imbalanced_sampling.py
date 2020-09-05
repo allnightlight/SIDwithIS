@@ -29,10 +29,11 @@ class SidEnvironmentImbalancedSampling(SidEnvironmentAbstract):
         
         NbatchEvOn = int(self.sampling_balance * Nbatch)
         NbatchEvOff = Nbatch - NbatchEvOn
+        assert NbatchEvOn > 0, "The given sampling_balance: %f is too small to ensure the sample size with event occurrence.".format(self.sampling_balance)
         
         NavailableEvOn = idxAvailableEvOn.shape[1]
         
-        for _ in range(NavailableEvOn//Nbatch):
+        for _ in range(NavailableEvOn//NbatchEvOn):
             
             idxEvOn = idxAvailableEvOn[:, np.random.randint(low=0, high=idxAvailableEvOn.shape[1], size=(NbatchEvOn,))] # (N0+N1, NbatchEvOn)
             idxEvOff = idxAvailableEvOff[:, np.random.randint(low=0, high=idxAvailableEvOff.shape[1], size=(NbatchEvOff,))] # (N0+N1, NbatchEvOff)
