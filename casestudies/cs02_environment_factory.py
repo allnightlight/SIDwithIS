@@ -17,4 +17,4 @@ class Cs02EnvironmentFactory(SidEnvironmentFactory):
 
     def createDataGeneratorSingleton(self, buildParameter):
         assert isinstance(buildParameter, Cs02BuildParameter)
-        return Cs02DataGeneratorSingleton(buildParameter.dataFilePath)
+        return Cs02DataGeneratorSingleton.getInstance(dataFilePath=buildParameter.dataFilePath)

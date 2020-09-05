@@ -29,8 +29,14 @@ class Cs02DataGeneratorSingleton(DataGeneratorAbstractSingleton):
         self.Nu = None
         
     # <<private>>
-    def loadData(self):
+    def loadDataReal(self):
         
+        print("""
+        A data set will be loaded from the following path:
+            {0}
+        Please, wait for a while.
+        """.format(self.dataFilePath))
+                
         with open(self.dataFilePath, "r") as fp:
             lines = fp.readlines()
     
