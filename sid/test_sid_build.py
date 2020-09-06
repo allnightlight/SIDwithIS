@@ -58,6 +58,11 @@ class Test(unittest.TestCase):
                                               , label="test imbalanced sampling" + str(k1)
                                               , use_imbalanced_sampling = True))
 
+            self.buildParameters.append(SidBuildParameter(nIntervalSave=nIntervalSave
+                                                          , Ntrain=2**7
+                                                          , nEpoch=nEpoch
+                                                          , agentClass="agent002"
+                                                          , label="test agent002 " + str(k1)))
         
         self.loader = Loader(agentFactory, buildParameterFactory, environmentFactory, trainerFactory, store)
         
