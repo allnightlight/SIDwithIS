@@ -3,7 +3,9 @@ Created on 2020/07/11
 
 @author: ukai
 '''
+from builtins import isinstance
 import os
+import shutil
 import unittest
 
 from builder import Builder
@@ -14,10 +16,10 @@ from sid_agent_factory import SidAgentFactory
 from sid_build_parameter import SidBuildParameter
 from sid_build_parameter_factory import SidBuildParameterFactory
 from sid_environment_factory import SidEnvironmentFactory
+from sid_evaluator import SidEvaluator
+from sid_evaluator_trend_viewer import SidEvaluatorTrendViewer
 from sid_trainer_factory import SidTrainerFactory
 from store import Store
-from sid_evaluator import SidEvaluator
-from builtins import isinstance
 
 
 class Test(unittest.TestCase):
@@ -30,6 +32,9 @@ class Test(unittest.TestCase):
         cls.dbPath = "testDb.sqlite"
         if os.path.exists(cls.dbPath):
             os.remove(cls.dbPath)
+        cls.figFolderPath = "./testFig"
+        
+        SidEvaluatorTrendViewer.figFolderPath = cls.figFolderPath
     
     def setUp(self):
         unittest.TestCase.setUp(self)
@@ -64,18 +69,20 @@ class Test(unittest.TestCase):
                                                           , agentClass="agent002"
                                                           , label="test agent002 " + str(k1)))
         
-        self.loader = Loader(agentFactory, buildParameterFactory, environmentFactory, trainerFactory, store)
+            self.loader = Loader(agentFactory, buildParameterFactory, environmentFactory, trainerFactory, store)
         
     @classmethod
     def tearDownClass(cls):
         super(Test, cls).tearDownClass()
-        cls.dbPath = "testDb.sqlite"
         if os.path.exists(cls.dbPath):
             os.remove(cls.dbPath)
-
+        if os.path.exists(cls.figFolderPath):
+            shutil.rmtree(cls.figFolderPath)
+            
     def test001(self):
         
         evaluator = SidEvaluator()
+        trend_viewer = SidEvaluatorTrendViewer(3)
         
         for buildParameter in self.buildParameters:
             assert isinstance(buildParameter, SidBuildParameter)
@@ -89,7 +96,13 @@ class Test(unittest.TestCase):
             row = evaluator.evaluate(agent, buildParameter, epoch, environment, trainer)
             
             assert isinstance(row, dict)
-
+            
+        for agent, buildParameter, epoch, environment, trainer in self.loader.load("test%", None):
+            figProp = trend_viewer.evaluate(agent, buildParameter, epoch, environment, trainer)
+            
+            assert isinstance(figProp, dict)
+            break
+            
 if __name__ == "__main__":
     #import sys;sys.argv = ['', 'Test.testName']
     unittest.main()
