@@ -80,15 +80,16 @@ class SidEvaluatorTrendViewer(SlEvaluator):
         if not os.path.exists(self.figFolderPath):
             os.mkdir(self.figFolderPath)
         
+        figProp = {}
         prefix = Utils.generateRandomString(16)
-        figFilePathFormat = os.path.join(self.figFolderPath, "%s_current_time={0}.png" % prefix) 
+        figFilePathFormat = os.path.join(self.figFolderPath, "%s_current_time={0:05d}.png" % prefix) 
         for k1 in np.random.permutation(idxEvOn)[:np.min((self.Nfig, len(idxEvOn)))]:
                     
             fig = plt.figure(figsize=self.figSize)
             self.draw_trend(T0[:,k1], Y0[:,k1,:], U0[:,k1,:], T2[:,k1], Y2[:,k1,:], U1[:,k1,:], Y2hat[:,k1,:])
-            t_str = str(T0[-1,k1])
-            plt.savefig(figFilePathFormat.format(t_str))
+            plt.savefig(figFilePathFormat.format(k1))
             plt.close(fig)
-
-        figProp = {"prefix": prefix}
+            
+            figProp[figFilePathFormat.format(k1)] = T0[-1,k1]
+        
         return figProp
