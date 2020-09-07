@@ -27,8 +27,8 @@ class SidAgentNaive(SidAgent, nn.Module):
     def forward(self, batchDataIn):        
         assert isinstance(batchDataIn, SidBatchDataEnvironment)
                 
-        N1 = batchDataIn._U0.shape[0]   
-        _Yhat2 = batchDataIn._Y0[-1,:,:].repeat(N1,1,1) # (N1, *, Ny)                
+        N1 = batchDataIn._U1.shape[0]   
+        _Yhat2 = batchDataIn._Y0[-1,:,:].repeat(N1+1,1,1) # (N1, *, Ny)                
         batchDataOut = SidBatchDataAgent(_Yhat2, T = batchDataIn.T2)
 
         return batchDataOut
