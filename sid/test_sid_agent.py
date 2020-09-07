@@ -13,6 +13,7 @@ from sid_batch_data_agent import SidBatchDataAgent
 from sid_environment_abstract import SidEnvironmentAbstract
 from sid_environment_normal_sampling import SidEnvironmentNormalSampling
 from sid_agent002 import SidAgent002
+from sid_agent_naive import SidAgentNaive
 
 
 class Test(unittest.TestCase):
@@ -36,7 +37,8 @@ class Test(unittest.TestCase):
         for agent in (SidAgent001(**params1)
                       , SidAgent001(**params2)
                       , SidAgent002(**params3)
-                      , SidAgent002(**params4)):
+                      , SidAgent002(**params4)
+                      , SidAgentNaive()):
             
             for batchDataIn in environment.generateBatchDataIterator():
                 batchDataOut = agent(batchDataIn)

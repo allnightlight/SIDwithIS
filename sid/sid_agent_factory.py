@@ -7,6 +7,7 @@ from sid_agent001 import SidAgent001
 from sid_agent002 import SidAgent002
 from sid_build_parameter import SidBuildParameter
 from sl_agent_factory import SlAgentFactory
+from sid_agent_naive import SidAgentNaive
 
 
 class SidAgentFactory(SlAgentFactory):
@@ -25,6 +26,9 @@ class SidAgentFactory(SlAgentFactory):
             
         if buildParameter.agentClass == "agent002":
             agent = SidAgent002(Ny = environment.Ny, Nu = environment.Nu, Nhidden = buildParameter.NhiddenAgent, use_offset_compensate=buildParameter.use_offset_compensate, dampingConstantInitial = buildParameter.dampingConstantInitial)
+
+        if buildParameter.agentClass == "agent_naive":
+            agent = SidAgentNaive()
 
         assert agent is not None
         

@@ -68,6 +68,12 @@ class Test(unittest.TestCase):
                                                           , nEpoch=nEpoch
                                                           , agentClass="agent002"
                                                           , label="test agent002 " + str(k1)))
+
+            self.buildParameters.append(SidBuildParameter(nIntervalSave=nIntervalSave
+                                                          , Ntrain=2**7
+                                                          , nEpoch=0
+                                                          , agentClass="agent_naive"
+                                                          , label="test agent naive " + str(k1)))
         
             self.loader = Loader(agentFactory, buildParameterFactory, environmentFactory, trainerFactory, store)
         
